@@ -7,7 +7,10 @@ package dk.easv.tictactoe.bll;
  */
 public class GameBoard implements IGameBoard
 {
+    //makes an array 3x3, where program keeps values of buttons
+    private int[][] board = new int [3][3];
 
+    private int currentPlayer;
     /**
      * Returns 0 for player 0, 1 for player 1.
      *
@@ -15,8 +18,7 @@ public class GameBoard implements IGameBoard
      */
     public int getNextPlayer()
     {
-        //TODO Implement this method
-        return 0;
+        return currentPlayer;
     }
 
     /**
@@ -31,8 +33,19 @@ public class GameBoard implements IGameBoard
      */
     public boolean play(int col, int row)
     {
-        //TODO Implement this method
-        return true;
+        //allows to change value only if the game isn't over and button is empty
+        if (isGameOver() || board[row][col] != -1)
+            return false;
+        board [row][col] = currentPlayer;
+
+
+        // switches current player if game isn't over
+        if (!isGameOver()) {
+            // (if player is 0, it'll become 1, otherwise it'll become 0)
+            currentPlayer = (currentPlayer == 0) ? 1 : 0;
+        }
+            return true;
+
     }
 
     /**
@@ -43,8 +56,7 @@ public class GameBoard implements IGameBoard
      */
     public boolean isGameOver()
     {
-        //TODO Implement this method
-        return false;
+        return getWinner() != -1;
     }
 
     /**
@@ -54,7 +66,20 @@ public class GameBoard implements IGameBoard
      */
     public int getWinner()
     {
-        //TODO Implement this method
+        for(int i = 0; i < 3; i++){
+            if (board[i][0] != -1 && board[i][0] == board[i][1] && board[i][1] == board[i][2]) {
+            return board[i][0];
+            }
+            if (board[0][i] != -1 && board[0][i] == board[1][i] && board[1][i] == board[2][i]) {
+                return board[0][i];
+            }
+            if (board[0][0] != -1 && board[0][0] == board[1][1] && board[1][1] == board[2][2]) {
+                    return board[0][0];
+                }
+            if (board[0][2] != -1 && board[0][2] == board[1][1] && board[1][1] == board[2][0]) {
+                return board[0][2];
+            }
+        }
         return -1;
     }
 
@@ -63,6 +88,15 @@ public class GameBoard implements IGameBoard
      */
     public void newGame()
     {
-        //TODO Implement this method
+        //sets all values to -1 (empty)
+        for(int r = 0; r < 3; r++)
+        {
+            for (int c = 0; c < 3; c++)
+            {
+                board [r][c] = -1;
+            }
+        }
+
+        currentPlayer = 0;
     }
 }
