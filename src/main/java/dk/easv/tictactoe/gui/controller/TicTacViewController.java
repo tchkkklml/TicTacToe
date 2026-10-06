@@ -3,6 +3,7 @@ package dk.easv.tictactoe.gui.controller;
 
 // Java imports
 import java.net.URL;
+import java.util.Objects;
 import java.util.ResourceBundle;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -15,13 +16,22 @@ import javafx.scene.layout.GridPane;
 // Project imports
 import dk.easv.tictactoe.bll.GameBoard;
 import dk.easv.tictactoe.bll.IGameBoard;
-
+import javafx.scene.layout.Pane;
+import javafx.scene.shape.Line;
 /**
  *
  * @author EASV
  */
 public class TicTacViewController implements Initializable
 {
+    //makes all lines visible to controller
+    @FXML
+    private Line line1,line2,line3,line4,line5,line6,line7,line8;
+
+    //makes all buttons visible to controller
+    @FXML
+    private Button btn1,btn2,btn3,btn4,btn5,btn6,btn7,btn8,btn9;
+
     @FXML
     private Label lblPlayer;
 
@@ -30,6 +40,8 @@ public class TicTacViewController implements Initializable
 
     @FXML
     private GridPane gridPane;
+
+
     
     private static final String TXT_PLAYER = "Player: ";
     private IGameBoard game;
@@ -59,6 +71,9 @@ public class TicTacViewController implements Initializable
                 {
                     int winner = game.getWinner();
                     displayWinner(winner);
+                    checkLines();
+
+
                 }
 
             }
@@ -79,6 +94,8 @@ public class TicTacViewController implements Initializable
         game.newGame();
         setPlayer();
         clearBoard();
+        hideLines();
+
     }
 
     /**
@@ -98,6 +115,7 @@ public class TicTacViewController implements Initializable
         game = new GameBoard();
         game.newGame();
         setPlayer();
+        hideLines();
     }
 
     /**
@@ -133,10 +151,62 @@ public class TicTacViewController implements Initializable
      */
     private void clearBoard()
     {
+        hideLines();
         for(Node n : gridPane.getChildren())
         {
             Button btn = (Button) n;
             btn.setText("");
         }
+    }
+    //shows lines if someone wins
+    private void checkLines(){
+        if(checkButtons(btn1,btn2,btn3)) {
+            line1.setVisible(true);
+        }
+        if(checkButtons(btn4,btn5,btn6)) {
+            line2.setVisible(true);
+        }
+        if(checkButtons(btn7,btn8,btn9)) {
+            line3.setVisible(true);
+        }
+
+        if(checkButtons(btn1,btn4,btn7)) {
+            line4.setVisible(true);
+        }
+        if(checkButtons(btn2,btn5,btn8)) {
+            line5.setVisible(true);
+        }
+        if(checkButtons(btn3,btn6,btn9)) {
+            line6.setVisible(true);
+        }
+
+        if(checkButtons(btn1,btn5,btn9)) {
+            line7.setVisible(true);
+        }
+        if(checkButtons(btn3,btn5,btn7)) {
+            line8.setVisible(true);
+        }
+
+
+    }
+    //hides all the lines
+    private void hideLines(){
+        line1.setVisible(false);
+        line2.setVisible(false);
+        line3.setVisible(false);
+        line4.setVisible(false);
+        line5.setVisible(false);
+        line6.setVisible(false);
+        line7.setVisible(false);
+        line8.setVisible(false);
+
+
+    }
+    //checks if 3 chosen buttons have the same text and aren't empty
+    private boolean checkButtons(Button b1,Button b2, Button b3){
+        if (b1.getText() != "" && b1.getText().equals( b2.getText()) && b1.getText().equals( b3.getText())){
+            return true;
+        }
+        else return false;
     }
 }

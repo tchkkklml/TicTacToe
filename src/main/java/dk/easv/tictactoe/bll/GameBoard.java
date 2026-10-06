@@ -8,8 +8,7 @@ package dk.easv.tictactoe.bll;
 public class GameBoard implements IGameBoard {
     //makes an array 3x3, where program keeps values of buttons
     private int[][] board = new int[3][3];
-
-    private int nextPlayer;
+    private int nextPlayer; // a player whose turn it is now
 
     /**
      * Returns 0 for player 0, 1 for player 1.
@@ -20,6 +19,7 @@ public class GameBoard implements IGameBoard {
 
         return nextPlayer;
     }
+
 
     /**
      * Attempts to let the current player play at the given coordinates. It the
@@ -32,10 +32,11 @@ public class GameBoard implements IGameBoard {
      * this method will always return false.
      */
     public boolean play(int col, int row) {
-        //allows to change value only if the game isn't over and button is empty
-        if (isGameOver() || board[row][col] != -1)
+        //allows to change value of buttons only if the game isn't over and button is empty
+        if (isGameOver() || board[row][col] != -1){
             return false;
-        board[row][col] = nextPlayer;
+        }
+        board[row][col] = nextPlayer;//puts new buttons value into array
 
 
         // switches current player if game isn't over
@@ -62,8 +63,9 @@ public class GameBoard implements IGameBoard {
     private boolean isBoardFull() {
         for (int r = 0; r < 3; r++) {
             for (int c = 0; c < 3; c++) {
-                if (board[r][c] == -1) {
-                    return false;
+                if (board[r][c] == -1){
+                    //chacks for any empty spaces
+                    return false; //false if found
                 }
 
             }
