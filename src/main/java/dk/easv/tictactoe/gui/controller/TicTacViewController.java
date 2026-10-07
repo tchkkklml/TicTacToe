@@ -4,6 +4,7 @@ package dk.easv.tictactoe.gui.controller;
 // Java imports
 import java.net.URL;
 import java.util.Objects;
+import java.util.Random;
 import java.util.ResourceBundle;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -22,15 +23,14 @@ import javafx.scene.shape.Line;
  *
  * @author EASV
  */
-public class TicTacViewController implements Initializable
-{
+public class TicTacViewController implements Initializable {
     //makes all lines visible to controller
     @FXML
-    private Line line1,line2,line3,line4,line5,line6,line7,line8;
+    private Line line1, line2, line3, line4, line5, line6, line7, line8;
 
     //makes all buttons visible to controller
     @FXML
-    private Button btn1,btn2,btn3,btn4,btn5,btn6,btn7,btn8,btn9;
+    private Button btn1, btn2, btn3, btn4, btn5, btn6, btn7, btn8, btn9;
 
     @FXML
     private Label lblPlayer;
@@ -42,9 +42,9 @@ public class TicTacViewController implements Initializable
     private GridPane gridPane;
 
 
-    
     private static final String TXT_PLAYER = "Player: ";
     private IGameBoard game;
+    private boolean onePlayerMode = false;
 
     /**
      * Event handler for the grid buttons
@@ -52,33 +52,30 @@ public class TicTacViewController implements Initializable
      * @param event
      */
     @FXML
-    private void handleButtonAction(ActionEvent event)
-    {
-        try
-        {
+    private void handleButtonAction(ActionEvent event) {
+        try {
             Integer row = GridPane.getRowIndex((Node) event.getSource());
             Integer col = GridPane.getColumnIndex((Node) event.getSource());
             int r = (row == null) ? 0 : row;
             int c = (col == null) ? 0 : col;
             int player = game.getNextPlayer();
-            if (game.play(c, r))
-            {
+            if (game.play(c, r)) {
                 Button btn = (Button) event.getSource();
                 String xOrO = player == 0 ? "X" : "O";
                 btn.setText(xOrO);
                 setPlayer();
-                if (game.isGameOver())
-                {
+                if (game.isGameOver()) {
                     int winner = game.getWinner();
                     displayWinner(winner);
                     checkLines();
+                }
 
-
+                if (onePlayerMode && !game.isGameOver()) {
+                    computerMove();
                 }
 
             }
-        } catch (Exception e)
-        {
+        } catch (Exception e) {
             System.out.println(e.getMessage());
         }
     }
@@ -89,8 +86,7 @@ public class TicTacViewController implements Initializable
      * @param event
      */
     @FXML
-    private void handleNewGame(ActionEvent event)
-    {
+    private void handleNewGame(ActionEvent event) {
         game.newGame();
         setPlayer();
         clearBoard();
@@ -101,17 +97,13 @@ public class TicTacViewController implements Initializable
     /**
      * Initializes a new controller
      *
-     * @param url
-     * The location used to resolve relative paths for the root object, or
-     * {@code null} if the location is not known.
-     *
-     * @param rb
-     * The resources used to localize the root object, or {@code null} if
-     * the root object was not localized.
+     * @param url The location used to resolve relative paths for the root object, or
+     *            {@code null} if the location is not known.
+     * @param rb  The resources used to localize the root object, or {@code null} if
+     *            the root object was not localized.
      */
     @Override
-    public void initialize(URL url, ResourceBundle rb)
-    {
+    public void initialize(URL url, ResourceBundle rb) {
         game = new GameBoard();
         game.newGame();
         setPlayer();
@@ -121,21 +113,19 @@ public class TicTacViewController implements Initializable
     /**
      * Set the next player
      */
-    private void setPlayer()
-    {
+    private void setPlayer() {
         lblPlayer.setText(TXT_PLAYER + game.getNextPlayer());
     }
 
 
     /**
      * Finds a winner or a draw and displays a message based
+     *
      * @param winner
      */
-    private void displayWinner(int winner)
-    {
+    private void displayWinner(int winner) {
         String message = "";
-        switch (winner)
-        {
+        switch (winner) {
             case -1:
                 message = "It's a draw :-(";
                 break;
@@ -149,48 +139,48 @@ public class TicTacViewController implements Initializable
     /**
      * Clears the game board in the GUI
      */
-    private void clearBoard()
-    {
+    private void clearBoard() {
         hideLines();
-        for(Node n : gridPane.getChildren())
-        {
+        for (Node n : gridPane.getChildren()) {
             Button btn = (Button) n;
             btn.setText("");
         }
     }
+
     //shows lines if someone wins
-    private void checkLines(){
-        if(checkButtons(btn1,btn2,btn3)) {
+    private void checkLines() {
+        if (checkButtons(btn1, btn2, btn3)) {
             line1.setVisible(true);
         }
-        if(checkButtons(btn4,btn5,btn6)) {
+        if (checkButtons(btn4, btn5, btn6)) {
             line2.setVisible(true);
         }
-        if(checkButtons(btn7,btn8,btn9)) {
+        if (checkButtons(btn7, btn8, btn9)) {
             line3.setVisible(true);
         }
 
-        if(checkButtons(btn1,btn4,btn7)) {
+        if (checkButtons(btn1, btn4, btn7)) {
             line4.setVisible(true);
         }
-        if(checkButtons(btn2,btn5,btn8)) {
+        if (checkButtons(btn2, btn5, btn8)) {
             line5.setVisible(true);
         }
-        if(checkButtons(btn3,btn6,btn9)) {
+        if (checkButtons(btn3, btn6, btn9)) {
             line6.setVisible(true);
         }
 
-        if(checkButtons(btn1,btn5,btn9)) {
+        if (checkButtons(btn1, btn5, btn9)) {
             line7.setVisible(true);
         }
-        if(checkButtons(btn3,btn5,btn7)) {
+        if (checkButtons(btn3, btn5, btn7)) {
             line8.setVisible(true);
         }
 
 
     }
+
     //hides all the lines
-    private void hideLines(){
+    private void hideLines() {
         line1.setVisible(false);
         line2.setVisible(false);
         line3.setVisible(false);
@@ -202,11 +192,58 @@ public class TicTacViewController implements Initializable
 
 
     }
+
     //checks if 3 chosen buttons have the same text and aren't empty
-    private boolean checkButtons(Button b1,Button b2, Button b3){
-        if (b1.getText() != "" && b1.getText().equals( b2.getText()) && b1.getText().equals( b3.getText())){
+    private boolean checkButtons(Button b1, Button b2, Button b3) {
+        if (b1.getText() != "" && b1.getText().equals(b2.getText()) && b1.getText().equals(b3.getText())) {
             return true;
+        } else return false;
+    }
+
+    public void handleOnePlayer(ActionEvent actionEvent) {
+        onePlayerMode = true;
+        game.newGame();
+        setPlayer();
+        clearBoard();
+    }
+
+    public void handleTwoPlayer(ActionEvent actionEvent) {
+        onePlayerMode = false;
+        game.newGame();
+        setPlayer();
+        clearBoard();
+
+    }
+
+    private void computerMove() {
+        Random random = new Random();
+
+        Button[] buttons = {
+                btn1, btn2, btn3,
+                btn4, btn5, btn6,
+                btn7, btn8, btn9
+        };
+
+        while (!game.isGameOver()) {
+
+            int position = random.nextInt(9);
+
+            int row = position / 3;
+            int col = position % 3;
+
+            if (game.play(col, row)) {
+                buttons[position].setText("O");
+
+                setPlayer();
+
+                if (game.isGameOver()) {
+                    int winner = game.getWinner();
+                    displayWinner(winner);
+                    checkLines();
+                }
+
+                break;
+            }
         }
-        else return false;
     }
 }

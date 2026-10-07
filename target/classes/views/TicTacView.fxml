@@ -6,6 +6,7 @@
 <?import javafx.scene.layout.BorderPane?>
 <?import javafx.scene.layout.ColumnConstraints?>
 <?import javafx.scene.layout.GridPane?>
+<?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.Pane?>
 <?import javafx.scene.layout.RowConstraints?>
 <?import javafx.scene.layout.StackPane?>
@@ -21,11 +22,20 @@
       </Label>
    </top>
    <bottom>
-      <Button fx:id="btnNewGame" mnemonicParsing="false" onAction="#handleNewGame" text="New Game" BorderPane.alignment="CENTER_RIGHT">
+      <HBox BorderPane.alignment="CENTER_RIGHT">
          <BorderPane.margin>
             <Insets top="10.0" />
          </BorderPane.margin>
-      </Button>
+         <children>
+            <Button fx:id="btnNewGame" mnemonicParsing="false" onAction="#handleNewGame" prefHeight="25.0" prefWidth="87.0" text="New Game" />
+            <Button fx:id="btnOnePlayer" mnemonicParsing="false" onAction="#handleOnePlayer" text="1 Player Mode">
+               <HBox.margin>
+                  <Insets left="115.0" />
+               </HBox.margin>
+            </Button>
+            <Button fx:id="btnTwoPlayer" mnemonicParsing="false" onAction="#handleTwoPlayer" text="2 Player Mode" />
+         </children>
+      </HBox>
    </bottom>
    <padding>
       <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
