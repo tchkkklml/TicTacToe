@@ -69,7 +69,7 @@ public class TicTacViewController implements Initializable {
                     displayWinner(winner);
                     checkLines();
                 }
-
+                // If we're in one player mode and game isnt over the computer makes a move
                 if (onePlayerMode && !game.isGameOver()) {
                     computerMove();
                 }
@@ -200,6 +200,7 @@ public class TicTacViewController implements Initializable {
         } else return false;
     }
 
+    // if we press one player mode it starts game against computer
     public void handleOnePlayer(ActionEvent actionEvent) {
         onePlayerMode = true;
         game.newGame();
@@ -207,6 +208,7 @@ public class TicTacViewController implements Initializable {
         clearBoard();
     }
 
+    // starts two player mode
     public void handleTwoPlayer(ActionEvent actionEvent) {
         onePlayerMode = false;
         game.newGame();
@@ -215,6 +217,7 @@ public class TicTacViewController implements Initializable {
 
     }
 
+    // method for computers turn
     private void computerMove() {
         Random random = new Random();
 
@@ -224,25 +227,29 @@ public class TicTacViewController implements Initializable {
                 btn7, btn8, btn9
         };
 
-        while (!game.isGameOver()) {
+        //computer checks if game is over yet or if its their turn, if both is false it makes a turn
+        boolean moveMade = false;
+
+        while (!game.isGameOver() && !moveMade) {
 
             int position = random.nextInt(9);
 
             int row = position / 3;
             int col = position % 3;
 
+            // checks if square is empty and then puts O if it is
             if (game.play(col, row)) {
                 buttons[position].setText("O");
 
+                moveMade = true;
                 setPlayer();
 
+                //checks who won and shows in the label who won
                 if (game.isGameOver()) {
                     int winner = game.getWinner();
                     displayWinner(winner);
                     checkLines();
                 }
-
-                break;
             }
         }
     }
