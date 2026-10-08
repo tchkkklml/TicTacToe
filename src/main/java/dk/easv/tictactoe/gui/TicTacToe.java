@@ -34,14 +34,4 @@ public class TicTacToe extends Application
 
         stage.show();
     }
-
-    /**
-     * Entry point of the application
-     *
-     * @param args the command line arguments
-     */
-    public static void main(String[] args)
-    {
-        launch(args);
-    }
 }

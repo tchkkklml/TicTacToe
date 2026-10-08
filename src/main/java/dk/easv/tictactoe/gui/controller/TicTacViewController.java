@@ -3,7 +3,6 @@ package dk.easv.tictactoe.gui.controller;
 
 // Java imports
 import java.net.URL;
-import java.util.Objects;
 import java.util.Random;
 import java.util.ResourceBundle;
 import javafx.event.ActionEvent;
@@ -13,17 +12,30 @@ import javafx.scene.Node;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.layout.GridPane;
+import javafx.scene.shape.Line;
 
 // Project imports
 import dk.easv.tictactoe.bll.GameBoard;
 import dk.easv.tictactoe.bll.IGameBoard;
-import javafx.scene.layout.Pane;
-import javafx.scene.shape.Line;
+
 /**
  *
  * @author EASV
  */
 public class TicTacViewController implements Initializable {
+
+    //starts one player game
+    @FXML
+    public Button btnOnePlayer;
+
+    //starts new game
+    @FXML
+    public Button btnNewGame;
+
+    //starts two player game
+    @FXML
+    public Button btnTwoPlayer;
+
     //makes all lines visible to controller
     @FXML
     private Line line1, line2, line3, line4, line5, line6, line7, line8;
@@ -34,9 +46,6 @@ public class TicTacViewController implements Initializable {
 
     @FXML
     private Label lblPlayer;
-
-    @FXML
-    private Button btnNewGame;
 
     @FXML
     private GridPane gridPane;
@@ -189,8 +198,6 @@ public class TicTacViewController implements Initializable {
         line6.setVisible(false);
         line7.setVisible(false);
         line8.setVisible(false);
-
-
     }
 
     //checks if 3 chosen buttons have the same text and aren't empty
